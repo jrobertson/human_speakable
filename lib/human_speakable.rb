@@ -2,8 +2,8 @@
 
 # file: human_speakable.rb
 
-module HumanSpeakable
-
+module Ordinals
+  
   refine Integer do
 
     def ordinal
@@ -12,6 +12,34 @@ module HumanSpeakable
     end
 
   end
+  
+end  
+
+module HumanSpeakable
+  using Ordinals
+  
+  def self.format_date(date)
+        
+    case (date - Date.today).to_i
+    when (0)     then 'today'
+    when (1)     then 'tomorrow'      
+    when (2..6)  then 'this ' + Date::DAYNAMES[date.wday]
+    when (7..10) then 'next ' + Date::DAYNAMES[date.wday]
+    when (11..14) 
+      ['next', Date::DAYNAMES[date.wday], 'the', (date.day.ordinal), 'of', 
+        Date::MONTHNAMES[date.month]].join(' ')                         
+    when (15..21)
+      [Date::DAYNAMES[date.wday], 'the', (date.day.ordinal), 'of', 
+        Date::MONTHNAMES[date.month]].join(' ')      
+    else
+      ['on the', (date.day.ordinal), 'of', 
+        Date::MONTHNAMES[date.month]].join(' ')      
+    end
+  end
+  
+  def self.format_time(time)  
+    time.strftime("%-I:%M%P")
+  end
 
   refine String do
     
@@ -19,8 +47,7 @@ module HumanSpeakable
 
     def humanize()
       date = Date.parse(self)
-      [Date::DAYNAMES[date.wday], 'the', date.day.ordinal, 'of', 
-       Date::MONTHNAMES[date.month]].join(' ')   
+      HumanSpeakable.format_date(date)
     end
 
   end
@@ -29,10 +56,18 @@ module HumanSpeakable
     
     def humanize()
       date = self
-      [Date::DAYNAMES[date.wday], 'the', date.day.ordinal, 'of', 
-       Date::MONTHNAMES[date.month]].join(' ')   
+      HumanSpeakable.format_date(date)
     end
 
   end
+  
+  refine Time do
+    
+    def humanize()
+      time = self
+      HumanSpeakable.format_time(time)
+    end
+
+  end  
 
 end
