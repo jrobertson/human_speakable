@@ -18,9 +18,9 @@ end
 module HumanSpeakable
   using Ordinals
   
-  def self.format_date(date)
+  def self.format_date(date, year=false)
         
-    case (date - Date.today).to_i
+    s = case (date - Date.today).to_i
     when (0)     then 'today'
     when (1)     then 'tomorrow'      
     when (2..6)  then 'this ' + Date::DAYNAMES[date.wday]
@@ -35,6 +35,8 @@ module HumanSpeakable
       ['on the', (date.day.ordinal), 'of', 
         Date::MONTHNAMES[date.month]].join(' ')      
     end
+    
+    s + ' ' + date.year.to_s if year
   end
   
   def self.format_time(time)  
@@ -54,9 +56,9 @@ module HumanSpeakable
 
   refine Date do
     
-    def humanize()
+    def humanize(year: false)
       date = self
-      HumanSpeakable.format_date(date)
+      HumanSpeakable.format_date(date, year)
     end
 
   end
