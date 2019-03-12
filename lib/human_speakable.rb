@@ -36,7 +36,7 @@ module HumanSpeakable
         Date::MONTHNAMES[date.month]].join(' ')      
     end
     
-    s + ' ' + date.year.to_s if year
+    year ? s + ' ' + date.year.to_s : s
   end
   
   def self.format_time(time)  
