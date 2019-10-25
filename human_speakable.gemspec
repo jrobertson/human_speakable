@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'human_speakable'
-  s.version = '0.1.3'
+  s.version = '0.2.0'
   s.summary = 'Makes it convenient to format a date as it would be spoken in English.'
   s.authors = ['James Robertson']
   s.files = Dir['lib/human_speakable.rb']

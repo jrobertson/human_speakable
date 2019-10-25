@@ -39,8 +39,14 @@ module HumanSpeakable
     year ? s + ' ' + date.year.to_s : s
   end
   
-  def self.format_time(time)  
-    time.strftime("%-I:%M%P")
+  def self.format_time(time)    
+    
+    h, m, meridiem = time.strftime("%-I %M %P").split
+    a = [h]
+    a << ':' + m unless m == '00'
+    a << ' ' + meridiem    
+    a.join()
+    
   end
 
   refine String do
